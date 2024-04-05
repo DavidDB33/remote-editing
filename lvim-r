@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [ -z $1 ] ; then
+	echo "lvim-r: lvim for remote editing by scp. First arg is the remote. Second arg the file (in relative path from local)"
+	echo "  Usage: lvim-r <host> <rel-filename>"
+	echo "  Example: lvim-r miremotehost mifile.txt"
+	echo '  Example-desc: edit through ssh at miremotehost the file $HOME/$(pwd without the local $HOME)/mifile.txt'
+elif [ -z $2 ] ; then
+	echo "Second arg needed. To help, execute without commands"
+else
+	REMOTE=$1
+	FILENAME=$2
+	MIPATH=$(pwd)
+	TARGET=~${MIPATH#$HOME}/$FILENAME
+	#echo full target: "scp://$REMOTE/$TARGET"
+	exec lvim scp://$REMOTE/$TARGET
+fi
